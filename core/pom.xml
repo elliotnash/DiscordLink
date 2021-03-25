@@ -13,11 +13,6 @@
     <artifactId>DiscordLink-Core</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
-    </properties>
-
     <repositories>
         <repository>
             <id>jcenter</id>
