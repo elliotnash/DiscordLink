@@ -21,7 +21,7 @@ public class ChatListener implements DiscordEventListener {
 
     @Override
     public void onReady(){
-        client.send("Server has started");
+        client.sendEmbed("Server has started");
     }
 
     @Override
@@ -36,12 +36,12 @@ public class ChatListener implements DiscordEventListener {
 
     @Subscribe(order = PostOrder.LAST)
     public void onJoin(PostLoginEvent event){
-        client.send(event.getPlayer().getUsername()+" joined the game", "System", event.getPlayer().getUniqueId());
+        client.sendEmbed(event.getPlayer().getUsername()+" joined the game", event.getPlayer().getUniqueId());
     }
 
     @Subscribe(order = PostOrder.LAST)
     public void onLeave(DisconnectEvent event){
-        client.send(event.getPlayer().getUsername()+" left the game", "System", event.getPlayer().getUniqueId());
+        client.sendEmbed(event.getPlayer().getUsername()+" left the game", event.getPlayer().getUniqueId());
     }
 
 }

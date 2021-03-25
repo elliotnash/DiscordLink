@@ -43,6 +43,14 @@ public class WebhookManager {
         client.send(builder.build());
     }
 
+
+    public void sendEmbed(String message, String username){
+        sendEmbedUrl(message, username, sysUrl);
+    }
+    public void sendEmbed(String message, String username, String uuid){
+        sendEmbedUrl(message, username, sysUrl, avatarUrl+uuid);
+    }
+
     private void sendEmbedUrl(String message, String username, String avatarUrl){
         WebhookEmbed embed = new WebhookEmbedBuilder()
                 .setColor(0xFF00EE)
@@ -52,6 +60,19 @@ public class WebhookManager {
         WebhookMessageBuilder builder = new WebhookMessageBuilder();
         builder.setUsername(username);
         builder.setAvatarUrl(avatarUrl);
+        builder.addEmbeds(embed);
+        client.send(builder.build());
+    }
+
+    private void sendEmbedUrl(String message, String username, String avatar1Url, String avatar2Url){
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(0xFF00EE)
+                .setFooter(new WebhookEmbed.EmbedFooter(message, avatar2Url))
+                .build();
+
+        WebhookMessageBuilder builder = new WebhookMessageBuilder();
+        builder.setUsername(username);
+        builder.setAvatarUrl(avatar1Url);
         builder.addEmbeds(embed);
         client.send(builder.build());
     }
