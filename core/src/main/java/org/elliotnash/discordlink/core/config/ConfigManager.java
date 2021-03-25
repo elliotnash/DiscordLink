@@ -62,11 +62,16 @@ public class ConfigManager {
         return config.use2dAvatars;
     }
 
+    public String getMessageFormat(){
+        return config.messageFormat;
+    }
+
 }
 
 class Config {
     String discordToken;
     String channelID;
     boolean use2dAvatars;
+    String messageFormat;
     int configVersion;
 }

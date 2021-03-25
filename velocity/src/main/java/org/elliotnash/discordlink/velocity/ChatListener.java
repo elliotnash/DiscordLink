@@ -25,8 +25,8 @@ public class ChatListener implements DiscordEventListener {
     }
 
     @Override
-    public void onMessage(String message, String username){
-
+    public void onMessage(Component message){
+        server.sendMessage(message);
     }
 
     @Subscribe(order = PostOrder.LAST)

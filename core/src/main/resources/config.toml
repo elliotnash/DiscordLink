@@ -10,5 +10,13 @@ channelID="CHANNEL_ID"
 # instead of the default 3d ones.
 use2dAvatars=false
 
+# Sets the format of messages sent from discord to minecraft
+# formatted with minimessage - https://docs.adventure.kyori.net/minimessage.html#format
+# Placholders:
+# %displayname% - discord display name (includes nicknames)
+# %username% - discord username (does not include nicknames)
+# %message% - the message sent in discord
+messageFormat="<rainbow>[Discord]</rainbow> %displayname% >> %message%"
+
 # Don't touch this
 configVersion=1

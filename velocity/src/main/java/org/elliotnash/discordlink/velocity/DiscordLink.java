@@ -3,12 +3,11 @@ package org.elliotnash.discordlink.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import org.elliotnash.discordlink.core.DiscordClient;
-import org.elliotnash.discordlink.core.DiscordEventListener;
-import org.elliotnash.discordlink.core.Test;
 import org.elliotnash.discordlink.core.config.ConfigManager;
 import org.slf4j.Logger;
 
@@ -27,6 +26,7 @@ public class DiscordLink {
     private final ProxyServer server;
     private final Logger logger;
     private final Path dataDirectory;
+    private ChatListener chatListener;
 
     @Inject
     public DiscordLink(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory){
@@ -38,12 +38,13 @@ public class DiscordLink {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
 
-        ChatListener chatListener = new ChatListener(server);
+        chatListener = new ChatListener(server);
 
         ConfigManager config = new ConfigManager(dataDirectory+"/config.toml");
         config.read();
 
-        chatListener.client = new DiscordClient(chatListener, config.getToken(), config.getChannel(), config.use2dAvatars());
+        chatListener.client = new DiscordClient(chatListener, config.getToken(), config.getChannel(),
+                config.use2dAvatars(), config.getMessageFormat());
         try {
             chatListener.client.run();
         } catch (LoginException e) {
@@ -53,6 +54,11 @@ public class DiscordLink {
 
         server.getEventManager().register(this, chatListener);
 
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent event) {
+        chatListener.client.sendEmbed("Server has stopped");
     }
 
 }
