@@ -1,0 +1,14 @@
+# DiscordLink Config
+
+# The discord token.
+discordToken="TOKEN"
+
+# The id of the channel you want messages to sync with.
+channelID="CHANNEL_ID"
+
+# Set this to true to use 2d avatars as discord profile pictures
+# instead of the default 3d ones.
+use2dAvatars=false
+
+# Don't touch this
+configVersion=1
