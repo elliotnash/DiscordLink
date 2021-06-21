@@ -7,9 +7,10 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.slf4j.Logger;
+
 import org.elliotnash.discordlink.core.DiscordClient;
 import org.elliotnash.discordlink.core.config.ConfigManager;
-import org.slf4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.nio.file.Path;
