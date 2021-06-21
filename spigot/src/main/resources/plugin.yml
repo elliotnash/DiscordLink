@@ -1,0 +1,7 @@
+name: DiscordLink-Spigot
+#TODO use jenkins build number
+version: ${project.version}
+main: org.elliotnash.discordlink.spigot.DiscordLink
+api-version: 1.17
+description: A plugin to link a discord channel to minecraft
+author: Elliot Nash

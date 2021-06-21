@@ -8,6 +8,7 @@ import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+
 import org.elliotnash.discordlink.core.DiscordClient;
 import org.elliotnash.discordlink.core.DiscordEventListener;
 

@@ -20,6 +20,12 @@
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.elliotnash.discordlink.spigot</groupId>
+            <artifactId>DiscordLink-Spigot</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
