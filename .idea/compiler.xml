@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="DiscordLink-Core" />
+        <module name="core" />
         <module name="DiscordLink-Bundle" />
         <module name="velocity" />
+        <module name="DiscordLink-Core" />
       </profile>
     </annotationProcessing>
   </component>
