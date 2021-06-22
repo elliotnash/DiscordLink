@@ -1,12 +1,16 @@
 package org.elliotnash.discordlink.spigot;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.elliotnash.discordlink.core.DiscordClient;
 import org.elliotnash.discordlink.core.config.ConfigManager;
 
 import javax.security.auth.login.LoginException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public final class DiscordLink extends JavaPlugin {
 
@@ -24,7 +28,7 @@ public final class DiscordLink extends JavaPlugin {
         config.read();
 
         // run if server is in backend mode to a proxy (just forward death msg)
-        if (config.hasProxy()){
+        if (hasProxy()){
             getServer().getMessenger().registerOutgoingPluginChannel(this, "discordlink:death");
             getServer().getPluginManager().registerEvents(new DeathFowarder(this), this);
         }
@@ -51,7 +55,7 @@ public final class DiscordLink extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (config.hasProxy()){
+        if (hasProxy()){
 
         } else{
             chatListener.client.sendEmbed("Server has stopped");
@@ -63,4 +67,30 @@ public final class DiscordLink extends JavaPlugin {
             }
         }
     }
+
+    // todo ping bungee server to check if bungee
+    private boolean hasProxy() {
+        boolean isPaper = false;
+        try {
+            isPaper = Class.forName("com.destroystokyo.paper.VersionHistoryManager$VersionData") != null;
+        } catch (ClassNotFoundException ignored){}
+
+        boolean isBungeecord = getServer().spigot().getConfig()
+                .getConfigurationSection("settings")
+                .getBoolean( "settings.bungeecord" );
+
+        boolean isVelocity = false;
+        if (isPaper){
+            try {
+                Method getPaperConfig = Bukkit.spigot().getClass().getMethod("getPaperConfig");
+                getPaperConfig.setAccessible(true);
+                YamlConfiguration paperConfig = (YamlConfiguration) getPaperConfig.invoke(Bukkit.spigot());
+                isVelocity = paperConfig.getBoolean("settings.velocity-support.enabled");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return isBungeecord || isVelocity;
+    }
+
 }

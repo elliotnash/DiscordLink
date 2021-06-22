@@ -50,10 +50,6 @@ public class ConfigManager {
 
     }
 
-    public boolean hasProxy(){
-        return config.proxy;
-    }
-
     public String getToken(){
         return config.discordToken;
     }
@@ -73,7 +69,6 @@ public class ConfigManager {
 }
 
 class Config {
-    boolean proxy;
     String discordToken;
     String channelID;
     boolean use2dAvatars;

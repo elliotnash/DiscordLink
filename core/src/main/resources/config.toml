@@ -1,10 +1,5 @@
 # DiscordLink Config
 
-# Enable Proxy support (bungeecord/velocity). This should only be used on Spigot servers
-# when behind a Proxy. By enabling this, you can ignore the rest of the settings here,
-# as you will set them in your proxies DiscordLink config.
-proxy=false
-
 # The discord token.
 discordToken="TOKEN"
 
