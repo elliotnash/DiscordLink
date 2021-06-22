@@ -76,21 +76,28 @@ public class DiscordClient extends ListenerAdapter {
 
     public void send(String message) {
         if (webhooks != null)
-            webhooks.send(message, "System");
+            webhooks.send(formatMessage(message), "System");
     }
     public void send(String message, String username, UUID uuid) {send(message, username, uuid.toString());}
     public void send(String message, String username, String uuid) {
         if (webhooks != null)
-            webhooks.send(message, username, uuid);
+            webhooks.send(formatMessage(message), username, uuid);
     }
 
     public void sendEmbed(String message){
         if (webhooks != null)
-            webhooks.sendEmbed(message, "System");
+            webhooks.sendEmbed(formatMessage(message), "System");
     }
     public void sendEmbed(String message, UUID uuid) {sendEmbed(message, uuid.toString());}
     public void sendEmbed(String message, String uuid) {
         if (webhooks != null)
-            webhooks.sendEmbed(message, "System", uuid);
+            webhooks.sendEmbed(formatMessage(message), "System", uuid);
     }
+
+    public String formatMessage(String message){
+        // remove at everyone pings (add zero width space)
+        message = message.replaceAll("@everyone", "@\u200Beveryone");
+        return message;
+    }
+
 }
