@@ -18,5 +18,9 @@ use2dAvatars=false
 # %message% - the message sent in discord
 messageFormat="<rainbow>[Discord]</rainbow> %displayname% >> %message%"
 
+# This allows people to ping discord users from within minecraft
+# This only applys to individual users, not roles or @everyone
+allowUserPings = true
+
 # Don't touch this
 configVersion=1

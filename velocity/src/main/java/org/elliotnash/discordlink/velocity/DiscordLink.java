@@ -50,7 +50,7 @@ public class DiscordLink {
         config.read();
 
         chatListener.client = new DiscordClient(chatListener, config.getToken(), config.getChannel(),
-                config.use2dAvatars(), config.getMessageFormat());
+                config.use2dAvatars(), config.getMessageFormat(), config.getAllowUserPings());
         try {
             chatListener.client.run();
         } catch (LoginException e) {

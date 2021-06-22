@@ -66,6 +66,10 @@ public class ConfigManager {
         return config.messageFormat;
     }
 
+    public boolean getAllowUserPings(){
+        return config.allowUserPings;
+    }
+
 }
 
 class Config {
@@ -73,5 +77,6 @@ class Config {
     String channelID;
     boolean use2dAvatars;
     String messageFormat;
+    boolean allowUserPings;
     int configVersion;
 }

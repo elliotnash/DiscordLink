@@ -2,18 +2,19 @@ package org.elliotnash.discordlink.core;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DiscordClient extends ListenerAdapter {
 
@@ -21,26 +22,29 @@ public class DiscordClient extends ListenerAdapter {
     private final String channel_id;
     private final boolean use2dAvatars;
     private final String messageFormat;
+    private final boolean allowUserPings;
     private final DiscordEventListener listener;
     private JDA jda;
     private WebhookManager webhooks;
 
     public DiscordClient(DiscordEventListener listener, String token, String channel_id,
-                         boolean use2dAvatars, String messageFormat) {
+                         boolean use2dAvatars, String messageFormat, boolean allowUserPings) {
         this.listener = listener;
         this.token = token;
         this.channel_id = channel_id;
         this.use2dAvatars = use2dAvatars;
         this.messageFormat = messageFormat;
+        this.allowUserPings = allowUserPings;
     }
     public void run() throws LoginException {
-        jda = JDABuilder.createDefault(token).build();
+        jda = JDABuilder.create(token, GatewayIntent.GUILD_MEMBERS).build();
         jda.addEventListener(this);
     }
 
+    GuildChannel guildChannel;
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        GuildChannel guildChannel = jda.getGuildChannelById(channel_id);
+        guildChannel = jda.getGuildChannelById(channel_id);
         System.out.println(guildChannel);
         if (!(guildChannel instanceof TextChannel)){
             new LoginException("Invalid channel id: "+channel_id).printStackTrace();
@@ -94,9 +98,33 @@ public class DiscordClient extends ListenerAdapter {
             webhooks.sendEmbed(formatMessage(message), "System", uuid);
     }
 
+    Pattern usernamePattern = Pattern.compile("(?<=@)[^ ]{3,32}");
     public String formatMessage(String message){
         // remove at everyone pings (add zero width space)
         message = message.replaceAll("@everyone", "@\u200Beveryone");
+        // if disallow user pings, add zero width space after every @
+        if (!allowUserPings){
+            message = message.replaceAll("@", "@\u200B");
+        }
+        // if allow user pings, search server to see if user with name is in server,
+        // and replace @name with <@userid>
+        else {
+            // get possible usernames
+            Matcher m = usernamePattern.matcher(message);
+            while (m.find()){
+                String username = m.group(0);
+                System.out.println(username);
+                // for each username get Member with name
+                Optional<Member> maybeMember = guildChannel.getMembers().stream().filter(member ->
+                        member.getUser().getName().replaceAll(" ", "")
+                                .equalsIgnoreCase(username)).findAny();
+                // if member exists, replace the @name with <@userid>
+                if (maybeMember.isPresent()){
+                    message = message.replaceAll("@"+username,
+                            "<@"+maybeMember.get().getUser().getId()+">");
+                }
+            }
+        }
         return message;
     }
 
