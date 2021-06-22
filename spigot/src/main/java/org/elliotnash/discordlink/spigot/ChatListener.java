@@ -3,8 +3,10 @@ package org.elliotnash.discordlink.spigot;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -43,6 +45,11 @@ public class ChatListener implements DiscordEventListener, Listener {
     @EventHandler()
     public void onLeave(PlayerQuitEvent event){
         client.sendEmbed(event.getPlayer().getName()+" left the game", event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerDeath(PlayerDeathEvent event){
+        client.sendEmbed(event.getDeathMessage(), event.getEntity().getUniqueId());
     }
 
 }
