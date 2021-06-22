@@ -31,9 +31,10 @@ public class DeathListener {
             if(event.getSource() instanceof ServerConnection){
                 // Read the data written to the message
                 ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
-                // Example:
-                String message = in.readUTF();
-
+                // get uuid and death message
+                String uuid = in.readUTF();
+                String deathMessage = in.readUTF();
+                client.sendEmbed(deathMessage, uuid);
             }
 
         }

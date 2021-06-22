@@ -2,6 +2,7 @@ package org.elliotnash.discordlink.spigot;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -82,11 +83,10 @@ public final class DiscordLink extends JavaPlugin {
         boolean isVelocity = false;
         if (isPaper){
             try {
-                Method getPaperConfig = Bukkit.spigot().getClass().getMethod("getPaperConfig");
-                getPaperConfig.setAccessible(true);
+                Method getPaperConfig = Server.Spigot.class.getMethod("getPaperConfig");
                 YamlConfiguration paperConfig = (YamlConfiguration) getPaperConfig.invoke(Bukkit.spigot());
                 isVelocity = paperConfig.getBoolean("settings.velocity-support.enabled");
-            } catch (Exception e){
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e){
                 e.printStackTrace();
             }
         }
