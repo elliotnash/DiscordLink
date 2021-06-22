@@ -7,6 +7,8 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
+import com.velocitypowered.api.proxy.messages.MinecraftChannelIdentifier;
 import org.slf4j.Logger;
 
 import org.elliotnash.discordlink.core.DiscordClient;
@@ -36,6 +38,9 @@ public class DiscordLink {
         this.dataDirectory = dataDirectory;
     }
 
+    private final ChannelIdentifier deathChannel =
+            MinecraftChannelIdentifier.from("discordlink:death");
+
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
 
@@ -53,7 +58,13 @@ public class DiscordLink {
             logger.error("Failed to login, plugin is disabling");
         }
 
+        // register the chat listener
         server.getEventManager().register(this, chatListener);
+
+        // register the death message plugin listener
+        server.getChannelRegistrar().register(deathChannel);
+        server.getEventManager().register(this,
+                new DeathListener(chatListener.client, deathChannel));
 
     }
 
