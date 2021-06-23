@@ -22,17 +22,13 @@ public class DeathFowarder implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event){
         if (event.getDeathMessage() != null) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            // write message uuid as two longs
-            UUID messageUUID = UUID.randomUUID();
-            out.writeLong(messageUUID.getMostSignificantBits());
-            out.writeLong(messageUUID.getLeastSignificantBits());
             // write player uuid
             out.writeLong(event.getEntity().getUniqueId().getMostSignificantBits());
             out.writeLong(event.getEntity().getUniqueId().getLeastSignificantBits());
             // write death message
             out.writeUTF(event.getDeathMessage());
             // send packet
-            Bukkit.getServer().sendPluginMessage(plugin, "discordlink:death", out.toByteArray());
+            event.getEntity().sendPluginMessage(plugin, "discordlink:death", out.toByteArray());
         }
     }
 }
