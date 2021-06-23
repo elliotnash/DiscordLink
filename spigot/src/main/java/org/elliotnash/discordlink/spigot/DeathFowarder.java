@@ -9,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.UUID;
+
 public class DeathFowarder implements Listener {
 
     private final Plugin plugin;
@@ -20,8 +22,13 @@ public class DeathFowarder implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event){
         if (event.getDeathMessage() != null) {
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
-            // write uuid
-            out.writeUTF(event.getEntity().getUniqueId().toString());
+            // write message uuid as two longs
+            UUID messageUUID = UUID.randomUUID();
+            out.writeLong(messageUUID.getMostSignificantBits());
+            out.writeLong(messageUUID.getLeastSignificantBits());
+            // write player uuid
+            out.writeLong(event.getEntity().getUniqueId().getMostSignificantBits());
+            out.writeLong(event.getEntity().getUniqueId().getLeastSignificantBits());
             // write death message
             out.writeUTF(event.getDeathMessage());
             // send packet

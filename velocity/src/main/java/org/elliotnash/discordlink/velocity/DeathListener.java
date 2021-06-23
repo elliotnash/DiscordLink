@@ -9,6 +9,8 @@ import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.messages.ChannelIdentifier;
 import org.elliotnash.discordlink.core.DiscordClient;
 
+import java.util.UUID;
+
 public class DeathListener {
 
     private final DiscordClient client;
@@ -19,6 +21,7 @@ public class DeathListener {
         this.deathChannel = deathChannel;
     }
 
+    UUID lastMessageUUID = null;
     @Subscribe
     public void onPluginMessageEvent(PluginMessageEvent event){
         // Received plugin message, check channel identifier matches
@@ -31,10 +34,17 @@ public class DeathListener {
             if(event.getSource() instanceof ServerConnection){
                 // Read the data written to the message
                 ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
-                // get uuid and death message
-                String uuid = in.readUTF();
+                // get message uuid
+                UUID messageUUID = new UUID(in.readLong(), in.readLong());
+                // if this message has already been sent, return
+                if (lastMessageUUID.equals(messageUUID)) {
+                    return;
+                }
+                // get player uuid and death message
+                UUID playerUUID = new UUID(in.readLong(), in.readLong());
                 String deathMessage = in.readUTF();
-                client.sendEmbed(deathMessage, uuid);
+                // send message discord
+                client.sendEmbed(deathMessage, playerUUID);
             }
 
         }
