@@ -21,7 +21,7 @@ public class DeathListener {
         this.deathChannel = deathChannel;
     }
 
-    UUID lastMessageUUID = null;
+    UUID lastMessageUUID = UUID.randomUUID();
     @Subscribe
     public void onPluginMessageEvent(PluginMessageEvent event){
         // Received plugin message, check channel identifier matches
@@ -45,6 +45,8 @@ public class DeathListener {
                 String deathMessage = in.readUTF();
                 // send message discord
                 client.sendEmbed(deathMessage, playerUUID);
+                // set this as last message uuid
+                lastMessageUUID = messageUUID;
             }
 
         }
