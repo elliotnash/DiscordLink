@@ -98,7 +98,7 @@ public class DiscordClient extends ListenerAdapter {
             webhooks.sendEmbed(formatMessage(message), "System", uuid);
     }
 
-    Pattern usernamePattern = Pattern.compile("(?<=@)[^ ]{3,32}");
+    Pattern usernamePattern = Pattern.compile("(?<=@)[^ #]{3,32}");
     public String formatMessage(String message){
         // remove at everyone pings (add zero width space)
         message = message.replaceAll("@everyone", "@\u200Beveryone");
