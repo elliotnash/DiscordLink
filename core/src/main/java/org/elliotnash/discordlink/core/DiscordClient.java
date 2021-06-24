@@ -22,10 +22,10 @@ import java.util.regex.Pattern;
 public class DiscordClient extends ListenerAdapter {
 
     public static final Integer START_COLOUR = 0x2bcf0a;
-    public static final Integer STOP_COLOUR = 0xcf4c0a;
+    public static final Integer STOP_COLOUR = 0xeb3e13;
     public static final Integer JOIN_COLOUR = 0x4f84ff;
     public static final Integer QUIT_COLOUR = 0x5a20c7;
-    public static final Integer DEATH_COLOUR = 0x29061e;
+    public static final Integer DEATH_COLOUR = 0xeb004a;
 
     private final String token;
     private final String channel_id;
@@ -54,6 +54,11 @@ public class DiscordClient extends ListenerAdapter {
         jda.addEventListener(this);
     }
     public void shutdown(){
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         jda.shutdown();
     }
 
