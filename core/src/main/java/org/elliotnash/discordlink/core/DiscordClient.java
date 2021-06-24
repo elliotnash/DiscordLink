@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +48,8 @@ public class DiscordClient extends ListenerAdapter {
     public void run() throws LoginException {
         jda = JDABuilder.createDefault(token,
                 GatewayIntent.GUILD_MEMBERS)
+                .setChunkingFilter(ChunkingFilter.ALL)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE).build();
         jda.addEventListener(this);
     }
