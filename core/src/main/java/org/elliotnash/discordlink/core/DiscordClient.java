@@ -131,8 +131,6 @@ public class DiscordClient extends ListenerAdapter {
             Matcher m = usernamePattern.matcher(message);
             while (m.find()){
                 String username = m.group(0);
-                System.out.println(username);
-                System.out.println(guildChannel.getMembers());
                 // for each username get Member with name
                 Optional<Member> maybeMember = guildChannel.getMembers().stream().filter(member ->
                         member.getUser().getName().replaceAll(" ", "")
