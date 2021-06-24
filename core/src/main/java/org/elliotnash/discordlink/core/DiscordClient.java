@@ -38,7 +38,7 @@ public class DiscordClient extends ListenerAdapter {
         this.allowUserPings = allowUserPings;
     }
     public void run() throws LoginException {
-        JDA jda = JDABuilder.createDefault(token,
+        jda = JDABuilder.createDefault(token,
                 GatewayIntent.GUILD_MEMBERS,
                 GatewayIntent.GUILD_MESSAGES)
                 .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE).build();
