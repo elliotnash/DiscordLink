@@ -71,6 +71,7 @@ public class DiscordLink {
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         chatListener.client.sendEmbed("Server has stopped");
+        chatListener.client.shutdown();
     }
 
 }

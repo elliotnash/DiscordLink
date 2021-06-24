@@ -60,6 +60,7 @@ public final class DiscordLink extends JavaPlugin {
 
         } else{
             chatListener.client.sendEmbed("Server has stopped");
+            chatListener.client.shutdown();
 
             //close adventure audiences on disable
             if(this.adventure != null) {

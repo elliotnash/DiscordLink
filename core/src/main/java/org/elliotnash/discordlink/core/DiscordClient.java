@@ -44,6 +44,9 @@ public class DiscordClient extends ListenerAdapter {
                 .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE).build();
         jda.addEventListener(this);
     }
+    public void shutdown(){
+        jda.shutdown();
+    }
 
     GuildChannel guildChannel;
     @Override
