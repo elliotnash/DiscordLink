@@ -1,5 +1,7 @@
 package org.elliotnash.discordlink.core;
 
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -14,6 +16,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -136,14 +139,17 @@ public class DiscordClient extends ListenerAdapter {
             Matcher m = usernamePattern.matcher(message);
             while (m.find()){
                 String username = m.group(0);
-                // for each username get Member with name
-                Optional<Member> maybeMember = guildChannel.getMembers().stream().filter(member ->
-                        member.getUser().getName().replaceAll(" ", "")
-                                .equalsIgnoreCase(username)).findAny();
+
+                BoundExtractedResult<Member> closestMatch = FuzzySearch.extractOne(username.toLowerCase(),
+                        guildChannel.getMembers(), x -> x.getUser().getName()
+                                .replaceAll(" ", "").toLowerCase());
+
                 // if member exists, replace the @name with <@userid>
-                if (maybeMember.isPresent()){
+                System.out.println("Closest match is: "+closestMatch.getReferent());
+                System.out.println("Score is: "+closestMatch.getScore());
+                if (closestMatch.getScore() > 75){
                     message = message.replaceAll("@"+username,
-                            "<@"+maybeMember.get().getUser().getId()+">");
+                            "<@"+closestMatch.getReferent().getUser().getId()+">");
                 }
             }
         }
