@@ -37,7 +37,7 @@ public class DeathListener {
                 UUID playerUUID = new UUID(in.readLong(), in.readLong());
                 String deathMessage = in.readUTF();
                 // send message discord
-                client.sendEmbed(deathMessage, playerUUID);
+                client.sendEmbed(DiscordClient.DEATH_COLOUR, deathMessage, playerUUID);
             }
 
         }

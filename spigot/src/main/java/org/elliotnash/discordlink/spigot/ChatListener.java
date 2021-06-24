@@ -24,7 +24,7 @@ public class ChatListener implements DiscordEventListener, Listener {
 
     @Override
     public void onReady(){
-        client.sendEmbed("Server has started");
+        client.sendEmbed(DiscordClient.START_COLOUR, "Server has started");
     }
 
     @Override
@@ -39,17 +39,23 @@ public class ChatListener implements DiscordEventListener, Listener {
 
     @EventHandler()
     public void onJoin(PlayerJoinEvent event){
-        client.sendEmbed(event.getPlayer().getName()+" joined the game", event.getPlayer().getUniqueId());
+        client.sendEmbed(DiscordClient.JOIN_COLOUR,
+                event.getPlayer().getName()+" joined the game",
+                event.getPlayer().getUniqueId());
     }
 
     @EventHandler()
     public void onLeave(PlayerQuitEvent event){
-        client.sendEmbed(event.getPlayer().getName()+" left the game", event.getPlayer().getUniqueId());
+        client.sendEmbed(DiscordClient.QUIT_COLOUR,
+                event.getPlayer().getName()+" left the game",
+                event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event){
-        client.sendEmbed(event.getDeathMessage(), event.getEntity().getUniqueId());
+        client.sendEmbed(DiscordClient.DEATH_COLOUR,
+                event.getDeathMessage(),
+                event.getEntity().getUniqueId());
     }
 
 }

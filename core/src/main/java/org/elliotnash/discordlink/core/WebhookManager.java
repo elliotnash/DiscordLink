@@ -44,16 +44,16 @@ public class WebhookManager {
     }
 
 
-    public void sendEmbed(String message, String username){
-        sendEmbedUrl(message, username, sysUrl);
+    public void sendEmbed(Integer colour, String message, String username){
+        sendEmbedUrl(colour, message, username, sysUrl);
     }
-    public void sendEmbed(String message, String username, String uuid){
-        sendEmbedUrl(message, username, sysUrl, avatarUrl+uuid);
+    public void sendEmbed(Integer colour, String message, String username, String uuid){
+        sendEmbedUrl(colour, message, username, sysUrl, avatarUrl+uuid);
     }
 
-    private void sendEmbedUrl(String message, String username, String avatarUrl){
+    private void sendEmbedUrl(Integer colour, String message, String username, String avatarUrl){
         WebhookEmbed embed = new WebhookEmbedBuilder()
-                .setColor(0xFF00EE)
+                .setColor(colour)
                 .setDescription(message)
                 .build();
 
@@ -64,9 +64,9 @@ public class WebhookManager {
         client.send(builder.build());
     }
 
-    private void sendEmbedUrl(String message, String username, String avatar1Url, String avatar2Url){
+    private void sendEmbedUrl(Integer colour, String message, String username, String avatar1Url, String avatar2Url){
         WebhookEmbed embed = new WebhookEmbedBuilder()
-                .setColor(0xFF00EE)
+                .setColor(colour)
                 .setFooter(new WebhookEmbed.EmbedFooter(message, avatar2Url))
                 .build();
 

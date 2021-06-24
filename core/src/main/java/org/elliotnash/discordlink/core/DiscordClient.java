@@ -19,6 +19,12 @@ import java.util.regex.Pattern;
 
 public class DiscordClient extends ListenerAdapter {
 
+    public static final Integer START_COLOUR = 0x2bcf0a;
+    public static final Integer STOP_COLOUR = 0xcf4c0a;
+    public static final Integer JOIN_COLOUR = 0x4f84ff;
+    public static final Integer QUIT_COLOUR = 0x5a20c7;
+    public static final Integer DEATH_COLOUR = 0x29061e;
+
     private final String token;
     private final String channel_id;
     private final boolean use2dAvatars;
@@ -39,8 +45,7 @@ public class DiscordClient extends ListenerAdapter {
     }
     public void run() throws LoginException {
         jda = JDABuilder.createDefault(token,
-                GatewayIntent.GUILD_MEMBERS,
-                GatewayIntent.GUILD_MESSAGES)
+                GatewayIntent.GUILD_MEMBERS)
                 .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE).build();
         jda.addEventListener(this);
     }
@@ -95,14 +100,16 @@ public class DiscordClient extends ListenerAdapter {
             webhooks.send(formatMessage(message), username, uuid);
     }
 
-    public void sendEmbed(String message){
+    public void sendEmbed(Integer colour, String message){
         if (webhooks != null)
-            webhooks.sendEmbed(formatMessage(message), "System");
+            webhooks.sendEmbed(colour, formatMessage(message), "System");
     }
-    public void sendEmbed(String message, UUID uuid) {sendEmbed(message, uuid.toString());}
-    public void sendEmbed(String message, String uuid) {
+    public void sendEmbed(Integer colour, String message, UUID uuid) {
+        sendEmbed(colour, message, uuid.toString());
+    }
+    public void sendEmbed(Integer colour, String message, String uuid) {
         if (webhooks != null)
-            webhooks.sendEmbed(formatMessage(message), "System", uuid);
+            webhooks.sendEmbed(colour, formatMessage(message), "System", uuid);
     }
 
     Pattern usernamePattern = Pattern.compile("(?<=@)[^ #]{3,32}");
@@ -121,6 +128,7 @@ public class DiscordClient extends ListenerAdapter {
             while (m.find()){
                 String username = m.group(0);
                 System.out.println(username);
+                System.out.println(guildChannel.getMembers());
                 // for each username get Member with name
                 Optional<Member> maybeMember = guildChannel.getMembers().stream().filter(member ->
                         member.getUser().getName().replaceAll(" ", "")

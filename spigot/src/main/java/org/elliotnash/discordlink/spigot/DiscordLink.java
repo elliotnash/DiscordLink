@@ -59,7 +59,7 @@ public final class DiscordLink extends JavaPlugin {
         if (hasProxy()){
 
         } else{
-            chatListener.client.sendEmbed("Server has stopped");
+            chatListener.client.sendEmbed(DiscordClient.STOP_COLOUR, "Server has stopped");
             chatListener.client.shutdown();
 
             //close adventure audiences on disable
