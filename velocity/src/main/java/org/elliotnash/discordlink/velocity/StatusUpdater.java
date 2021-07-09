@@ -4,6 +4,11 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import org.elliotnash.discordlink.core.DiscordClient;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -44,10 +49,16 @@ public class StatusUpdater {
         // send chat listener current server statuses
         chatListener.onReady(currentServerStatus);
 
+        // task for sending messages
         server.getScheduler()
                 .buildTask(plugin, this::updateStatus)
                 .delay(30, TimeUnit.SECONDS)
                 .repeat(30, TimeUnit.SECONDS)
+                .schedule();
+        // task for updating channel topic
+        server.getScheduler()
+                .buildTask(plugin, this::updateDiscordStatus)
+                .repeat(5, TimeUnit.MINUTES)
                 .schedule();
     }
 
@@ -64,6 +75,19 @@ public class StatusUpdater {
             }
         }
         lastServerStatus = currentServerStatus;
+    }
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma", Locale.ENGLISH);
+    public void updateDiscordStatus(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("(updated ");
+        builder.append(formatter.format(LocalTime.now()));
+        builder.append(") ");
+        builder.append(server.getPlayerCount());
+        builder.append("/");
+        builder.append(server.getConfiguration().getShowMaxPlayers());
+        builder.append(" players online.");
+        chatListener.client.updateTopic(builder.toString());
     }
 
 }

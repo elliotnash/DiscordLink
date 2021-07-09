@@ -74,6 +74,7 @@ public class DiscordLink {
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
         chatListener.client.sendEmbedTitle(DiscordClient.STOP_COLOUR, "Proxy has stopped", "");
+        chatListener.client.updateTopic("Server offline");
         chatListener.client.shutdown();
     }
 

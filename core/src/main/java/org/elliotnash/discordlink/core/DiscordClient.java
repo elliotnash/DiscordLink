@@ -101,6 +101,9 @@ public class DiscordClient extends ListenerAdapter {
         }
     }
 
+    public void updateTopic(String topic){
+        guildChannel.getManager().setTopic(topic).queue();
+    }
 
     public void send(String message) {
         if (webhooks != null)
