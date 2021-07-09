@@ -24,7 +24,7 @@ public class ChatListener implements DiscordEventListener, Listener {
 
     @Override
     public void onReady(){
-        client.sendEmbed(DiscordClient.START_COLOUR, "Server has started");
+        client.sendEmbedTitle(DiscordClient.START_COLOUR, "Server has started", "");
     }
 
     @Override
