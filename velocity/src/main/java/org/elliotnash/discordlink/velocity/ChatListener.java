@@ -37,8 +37,6 @@ public class ChatListener implements DiscordEventListener {
     void sendStartup(){
         // both velocity and discord are ready
         if (dcReady && statuses!=null){
-            System.out.println("Sending welcome messages");
-            System.out.println(statuses);
             StringBuilder builder = new StringBuilder();
             for (ServerStatus status : statuses.values()){
                 builder.append("\n\u200B \u200B \u200B ").append(status.name).append(" is **")
