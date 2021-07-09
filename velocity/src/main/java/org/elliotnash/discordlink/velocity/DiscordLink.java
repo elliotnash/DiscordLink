@@ -40,8 +40,6 @@ public class DiscordLink {
 
     private final ChannelIdentifier deathChannel =
             MinecraftChannelIdentifier.from("discordlink:death");
-    private final ChannelIdentifier spigotStartupChannel =
-            MinecraftChannelIdentifier.from("discordlink:startup");
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
@@ -66,7 +64,7 @@ public class DiscordLink {
         // register the death message plugin listener
         server.getChannelRegistrar().register(deathChannel);
         server.getEventManager().register(this,
-                new SpigotListener(chatListener.client, deathChannel, spigotStartupChannel));
+                new SpigotListener(chatListener.client, deathChannel));
 
     }
 

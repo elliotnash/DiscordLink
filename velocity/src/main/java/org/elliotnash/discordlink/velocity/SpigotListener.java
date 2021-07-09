@@ -15,12 +15,10 @@ public class SpigotListener {
 
     private final DiscordClient client;
     private final ChannelIdentifier deathChannel;
-    private final ChannelIdentifier spigotStartupChannel;
 
-    public SpigotListener(DiscordClient client, ChannelIdentifier deathChannel, ChannelIdentifier spigotStartupChannel){
+    public SpigotListener(DiscordClient client, ChannelIdentifier deathChannel){
         this.client = client;
         this.deathChannel = deathChannel;
-        this.spigotStartupChannel = spigotStartupChannel;
     }
 
     @Subscribe
@@ -42,16 +40,6 @@ public class SpigotListener {
                 client.sendEmbed(DiscordClient.DEATH_COLOUR, deathMessage, playerUUID);
             }
 
-        } else if (event.getIdentifier().equals(spigotStartupChannel)){
-            event.setResult(PluginMessageEvent.ForwardResult.handled());
-            if (event.getSource() instanceof ServerConnection){
-                // startup is true if it's starting up, false when shutting down
-                boolean startup = event.getData()[0] != 0;
-                // send an embed depending on whether it's started or stopped
-                client.sendEmbed(DiscordClient.STOP_COLOUR,
-                        ((ServerConnection) event.getSource()).getServerInfo().getName()+" server has "+
-                        (startup ? "started":"stopped"));
-            }
         }
     }
 

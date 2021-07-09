@@ -19,6 +19,8 @@ public final class DiscordLink extends JavaPlugin {
     private BukkitAudiences adventure;
     private ConfigManager config;
 
+    private final String deathChannel = "discordlink:death";
+
     //TODO send start and stop messages from backend spigot servers
 
     @Override
@@ -30,8 +32,9 @@ public final class DiscordLink extends JavaPlugin {
 
         // run if server is in backend mode to a proxy (just forward death msg)
         if (hasProxy()){
-            getServer().getMessenger().registerOutgoingPluginChannel(this, "discordlink:death");
-            getServer().getPluginManager().registerEvents(new SpigotForwarder(this), this);
+            getServer().getMessenger().registerOutgoingPluginChannel(this, deathChannel);
+            getServer().getPluginManager().registerEvents(
+                    new SpigotForwarder(this, deathChannel), this);
         }
         // run if server is a standalone spigot server
         else {

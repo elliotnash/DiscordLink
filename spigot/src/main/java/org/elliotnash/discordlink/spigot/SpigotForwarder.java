@@ -14,8 +14,11 @@ import java.util.UUID;
 public class SpigotForwarder implements Listener {
 
     private final Plugin plugin;
-    SpigotForwarder(Plugin plugin){
+    private final String deathChannel;
+
+    SpigotForwarder(Plugin plugin, String deathChannel){
         this.plugin = plugin;
+        this.deathChannel = deathChannel;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -28,7 +31,7 @@ public class SpigotForwarder implements Listener {
             // write death message
             out.writeUTF(event.getDeathMessage());
             // send packet
-            event.getEntity().sendPluginMessage(plugin, "discordlink:death", out.toByteArray());
+            event.getEntity().sendPluginMessage(plugin, deathChannel, out.toByteArray());
         }
     }
 }
