@@ -22,7 +22,7 @@ public class ChatListener implements DiscordEventListener {
 
     @Override
     public void onReady(){
-        client.sendEmbed(DiscordClient.START_COLOUR, "Server has started");
+        client.sendEmbed(DiscordClient.START_COLOUR, "Proxy has started");
     }
 
     @Override
