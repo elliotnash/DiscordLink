@@ -116,6 +116,11 @@ public class DiscordClient extends ListenerAdapter {
         if (webhooks != null)
             webhooks.sendEmbed(colour, formatMessage(message), "System");
     }
+    public void sendEmbedTitle(Integer colour, String title, String message){
+        if (webhooks != null)
+            webhooks.sendEmbedTitle(colour, formatMessage(title), formatMessage(message), "System");
+    }
+
     public void sendEmbed(Integer colour, String message, UUID uuid) {
         sendEmbed(colour, message, uuid.toString());
     }
@@ -145,8 +150,6 @@ public class DiscordClient extends ListenerAdapter {
                                 .replaceAll(" ", "").toLowerCase());
 
                 // if member exists, replace the @name with <@userid>
-                System.out.println("Closest match is: "+closestMatch.getReferent());
-                System.out.println("Score is: "+closestMatch.getScore());
                 if (closestMatch.getScore() > 75){
                     message = message.replaceAll("@"+username,
                             "<@"+closestMatch.getReferent().getUser().getId()+">");

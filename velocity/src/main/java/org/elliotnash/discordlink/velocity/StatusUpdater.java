@@ -13,7 +13,7 @@ public class StatusUpdater {
 
     private final DiscordLink plugin;
     private final ProxyServer server;
-    private final DiscordClient client;
+    private final ChatListener chatListener;
     private Map<String, ServerStatus> lastServerStatus;
     private Map<String, ServerStatus> currentServerStatus;
 
@@ -34,14 +34,15 @@ public class StatusUpdater {
         }).collect(Collectors.toMap(entry -> entry.name, entry -> entry));
     }
 
-    public StatusUpdater(DiscordLink plugin, ProxyServer server, DiscordClient client){
+    public StatusUpdater(DiscordLink plugin, ProxyServer server, ChatListener chatListener){
         this.plugin = plugin;
         this.server = server;
-        this.client = client;
+        this.chatListener = chatListener;
         currentServerStatus = pingServers();
         lastServerStatus = currentServerStatus;
 
-
+        // send chat listener current server statuses
+        chatListener.onReady(currentServerStatus);
 
         server.getScheduler()
                 .buildTask(plugin, this::updateStatus)
@@ -56,9 +57,9 @@ public class StatusUpdater {
             ServerStatus status = currentServerStatus.get(key);
             if (status.online != lastServerStatus.get(key).online){
                 if (status.online){
-                    client.sendEmbed(DiscordClient.START_COLOUR, status.name+" server has started");
+                    chatListener.client.sendEmbedTitle(DiscordClient.START_COLOUR, status.name+" server has started", "");
                 } else {
-                    client.sendEmbed(DiscordClient.STOP_COLOUR, status.name+" server has stopped");
+                    chatListener.client.sendEmbedTitle(DiscordClient.STOP_COLOUR, status.name+" server has stopped", "");
                 }
             }
         }

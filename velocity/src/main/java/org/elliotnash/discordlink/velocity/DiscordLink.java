@@ -67,13 +67,13 @@ public class DiscordLink {
                 new SpigotListener(chatListener.client, deathChannel));
 
         // start the StatusUpdater
-        StatusUpdater updater = new StatusUpdater(this, server, chatListener.client);
+        StatusUpdater updater = new StatusUpdater(this, server, chatListener);
 
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        chatListener.client.sendEmbed(DiscordClient.STOP_COLOUR, "Proxy has stopped");
+        chatListener.client.sendEmbedTitle(DiscordClient.STOP_COLOUR, "Proxy has stopped", "");
         chatListener.client.shutdown();
     }
 

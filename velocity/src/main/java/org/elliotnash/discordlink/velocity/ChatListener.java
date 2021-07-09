@@ -12,6 +12,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.elliotnash.discordlink.core.DiscordClient;
 import org.elliotnash.discordlink.core.DiscordEventListener;
 
+import java.util.List;
+import java.util.Map;
+
 public class ChatListener implements DiscordEventListener {
 
     public DiscordClient client;
@@ -20,9 +23,29 @@ public class ChatListener implements DiscordEventListener {
         this.server = server;
     }
 
+    boolean dcReady = false;
+    Map<String, ServerStatus> statuses = null;
     @Override
     public void onReady(){
-        client.sendEmbed(DiscordClient.START_COLOUR, "Proxy has started");
+        dcReady = true;
+        sendStartup();
+    }
+    public void onReady(Map<String, ServerStatus> statuses){
+        this.statuses = statuses;
+        sendStartup();
+    }
+    void sendStartup(){
+        // both velocity and discord are ready
+        if (dcReady && statuses!=null){
+            System.out.println("Sending welcome messages");
+            System.out.println(statuses);
+            StringBuilder builder = new StringBuilder();
+            for (ServerStatus status : statuses.values()){
+                builder.append("\n\u200B \u200B \u200B ").append(status.name).append(" is **")
+                        .append(status.online ? "online" : "offline").append("**");
+            }
+            client.sendEmbedTitle(DiscordClient.START_COLOUR, "Proxy has started", builder.toString());
+        }
     }
 
     @Override

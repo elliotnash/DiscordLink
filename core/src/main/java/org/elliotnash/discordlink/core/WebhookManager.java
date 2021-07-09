@@ -77,4 +77,21 @@ public class WebhookManager {
         client.send(builder.build());
     }
 
+    public void sendEmbedTitle(Integer colour, String title, String message, String username){
+        sendEmbedUrlTitle(colour, title, message, username, sysUrl);
+    }
+    private void sendEmbedUrlTitle(Integer colour, String title, String message, String username, String avatarUrl){
+        WebhookEmbed embed = new WebhookEmbedBuilder()
+                .setColor(colour)
+                .setTitle(new WebhookEmbed.EmbedTitle(title, ""))
+                .setDescription(message)
+                .build();
+
+        WebhookMessageBuilder builder = new WebhookMessageBuilder();
+        builder.setUsername(username);
+        builder.setAvatarUrl(avatarUrl);
+        builder.addEmbeds(embed);
+        client.send(builder.build());
+    }
+
 }
