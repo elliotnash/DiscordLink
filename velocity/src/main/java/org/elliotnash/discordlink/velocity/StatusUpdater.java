@@ -58,6 +58,7 @@ public class StatusUpdater {
         // task for updating channel topic
         server.getScheduler()
                 .buildTask(plugin, this::updateDiscordStatus)
+                .delay(10, TimeUnit.SECONDS)
                 .repeat(5, TimeUnit.MINUTES)
                 .schedule();
     }
