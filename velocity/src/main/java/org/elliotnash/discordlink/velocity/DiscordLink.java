@@ -64,7 +64,7 @@ public class DiscordLink {
         // register the death message plugin listener
         server.getChannelRegistrar().register(deathChannel);
         server.getEventManager().register(this,
-                new DeathListener(chatListener.client, deathChannel));
+                new SpigotListener(chatListener.client, deathChannel));
 
     }
 

@@ -11,12 +11,12 @@ import org.elliotnash.discordlink.core.DiscordClient;
 
 import java.util.UUID;
 
-public class DeathListener {
+public class SpigotListener {
 
     private final DiscordClient client;
     private final ChannelIdentifier deathChannel;
 
-    public DeathListener(DiscordClient client, ChannelIdentifier deathChannel){
+    public SpigotListener(DiscordClient client, ChannelIdentifier deathChannel){
         this.client = client;
         this.deathChannel = deathChannel;
     }
