@@ -31,7 +31,7 @@ public final class DiscordLink extends JavaPlugin {
         // run if server is in backend mode to a proxy (just forward death msg)
         if (hasProxy()){
             getServer().getMessenger().registerOutgoingPluginChannel(this, "discordlink:death");
-            getServer().getPluginManager().registerEvents(new DeathFowarder(this), this);
+            getServer().getPluginManager().registerEvents(new SpigotForwarder(this), this);
         }
         // run if server is a standalone spigot server
         else {

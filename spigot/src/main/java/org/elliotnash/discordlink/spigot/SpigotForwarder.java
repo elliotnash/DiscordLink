@@ -11,10 +11,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
-public class DeathFowarder implements Listener {
+public class SpigotForwarder implements Listener {
 
     private final Plugin plugin;
-    DeathFowarder(Plugin plugin){
+    SpigotForwarder(Plugin plugin){
         this.plugin = plugin;
     }
 
