@@ -67,7 +67,7 @@ public class DiscordLink {
                 new SpigotListener(chatListener.client, deathChannel));
 
         // start the StatusUpdater
-        StatusUpdater updater = new StatusUpdater(server, chatListener.client);
+        StatusUpdater updater = new StatusUpdater(this, server, chatListener.client);
 
     }
 
