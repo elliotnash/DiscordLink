@@ -5,9 +5,12 @@ import me.xdrop.fuzzywuzzy.model.BoundExtractedResult;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.AnnotatedEventManager;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
@@ -50,11 +53,13 @@ public class DiscordClient extends ListenerAdapter {
     }
     public void run() throws LoginException {
         jda = JDABuilder.createDefault(token,
-                GatewayIntent.GUILD_MEMBERS)
+                GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE).build();
-        jda.addEventListener(this);
+                .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOTE)
+                .setEventManager(new AnnotatedEventManager())
+                .addEventListeners(this)
+                .build();
     }
     public void shutdown(){
         try {
@@ -66,7 +71,7 @@ public class DiscordClient extends ListenerAdapter {
     }
 
     GuildChannel guildChannel;
-    @Override
+    @SubscribeEvent
     public void onReady(@NotNull ReadyEvent event) {
         guildChannel = jda.getGuildChannelById(channel_id);
         System.out.println(guildChannel);
@@ -78,19 +83,28 @@ public class DiscordClient extends ListenerAdapter {
         TextChannel channel = (TextChannel) guildChannel;
 
         channel.retrieveWebhooks().queue(webhookList -> {
-            if (webhookList.isEmpty()){
+
+            String URL = null;
+            for (Webhook webhook : webhookList){
+                if (webhook.getToken()!=null){
+                    URL = webhook.getUrl();
+                    break;
+                }
+            }
+            if (URL == null){
                 channel.createWebhook("DiscordLink").queue(webhookResult -> {
                     webhooks = new WebhookManager(webhookResult.getUrl(), use2dAvatars);
                     listener.onReady();
                 });
             } else {
-                webhooks = new WebhookManager(webhookList.get(0).getUrl(), use2dAvatars);
+                webhooks = new WebhookManager(URL, use2dAvatars);
                 listener.onReady();
             }
+
         });
     }
 
-    @Override
+    @SubscribeEvent
     public void onMessageReceived(@NotNull MessageReceivedEvent event){
         if (event.getTextChannel().getId().equals(channel_id) && !event.getAuthor().isBot()){
             String message = messageFormat.replaceAll("%displayname%", event.getMember().getEffectiveName());
