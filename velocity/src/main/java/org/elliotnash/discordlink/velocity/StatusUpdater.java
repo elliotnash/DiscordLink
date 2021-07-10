@@ -59,7 +59,7 @@ public class StatusUpdater {
         server.getScheduler()
                 .buildTask(plugin, this::updateDiscordStatus)
                 .delay(10, TimeUnit.SECONDS)
-                .repeat(5, TimeUnit.MINUTES)
+                .repeat(10, TimeUnit.MINUTES)
                 .schedule();
     }
 
