@@ -73,7 +73,6 @@ public final class DiscordLink extends JavaPlugin {
         }
     }
 
-    // todo ping bungee server to check if bungee
     private boolean hasProxy() {
         boolean isPaper = false;
         try {
@@ -81,8 +80,7 @@ public final class DiscordLink extends JavaPlugin {
         } catch (ClassNotFoundException ignored){}
 
         boolean isBungeecord = getServer().spigot().getConfig()
-                .getConfigurationSection("settings")
-                .getBoolean( "settings.bungeecord" );
+                .getBoolean("settings.bungeecord");
 
         boolean isVelocity = false;
         if (isPaper){
